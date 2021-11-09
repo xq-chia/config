@@ -108,5 +108,6 @@ export LANG=en_US.UTF-8
 alias ls='ls -lAh --color=tty'
 alias python='python3'
 alias qq='shutdown now'
+alias emacs='emacs -nw'
 
 xmodmap ~/.xmodmaprc 2> /dev/null
