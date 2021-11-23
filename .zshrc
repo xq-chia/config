@@ -86,11 +86,7 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 
 
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='mvim'
- fi
+export EDITOR='vim'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -106,7 +102,14 @@ export LANG=en_US.UTF-8
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 alias ls='ls -lAh --color=tty'
+alias ps='ps -ef --forest'
 alias python='python3'
 alias qq='shutdown now'
+alias ssh_alibaba='ssh -i ~/.ssh/ecs.pem root@47.254.250.210'
+alias ftp_alibaba='ftp 47.254.250.210'
 
 xmodmap ~/.xmodmaprc 2> /dev/null
+
+autoload -U +X compinit && compinit -i
+autoload -U +X bashcompinit && bashcompinit -i
+complete -o nospace -F /usr/local/bin/aliyun aliyun

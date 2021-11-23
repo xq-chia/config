@@ -14,25 +14,23 @@ Plugin 'mhinz/vim-startify'                 " Load vim-startify that handle vim 
 Plugin 'jiangmiao/auto-pairs'               " Load auto-pairs that handle bracket and quote autocompletion
 Plugin 'tpope/vim-surround'                 " Load vim-surround that handle surrounding bracket, quote, and tag
 Plugin 'tpope/vim-commentary'               " Load vim-commentary that handle code commentary
+Plugin 'tpope/vim-rsi'                      " Load vim-rsi for readline style keybinding
 Plugin 'alvan/vim-closetag'                 " Load vim-closetag that handle html tag autocompletion
 Plugin 'Yggdroot/indentLine'                " Load indentLine that visualise indentation with vertical line
 Plugin 'majutsushi/tagbar'                  " Load tagbar that display a code outline viewer
 Plugin 'easymotion/vim-easymotion'          " Load easymotion that navigate file better
-Plugin 'haya14busa/vim-easyoperator-line'   " Load vim-easyoperaotr-line that extend vim-easymotion
-Plugin 'haya14busa/vim-easyoperator-phrase' " Load vim-easyoperaotr-line that extend vim-easymotion
+Plugin 'haya14busa/vim-easyoperator-line'   " Load vim-easyoperator-line that extend vim-easymotion
+Plugin 'haya14busa/vim-easyoperator-phrase' " Load vim-easyoperator-phrase that extend vim-easymotion
 Plugin 'wellle/targets.vim'                 " Load targets that extend vim text object
 Plugin 'kshenoy/vim-signature'              " Load vim-signature that display mark
 Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim undo history
 Plugin 'tpope/vim-fugitive'                 " Load vim-fugitive which integrates git
 Plugin 'bkad/CamelCaseMotion'               " Load CamelCaseMotion which move cursor with programming naming convention
-Plugin 'junegunn/vim-peekaboo'              " Load vim-peekaboo that extends '"' and '@'
+Plugin 'junegunn/vim-peekaboo'              " Load vim-peekaboo that extends register and macro
+Plugin 'tommcdo/vim-lion'                   " Load vim-lion that align code
+Plugin 'tommcdo/vim-exchange'               " Load vim-exchange that exchange words and lines
 call vundle#end()                           " Terminate initialisation of Vundle
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
-" ale linter, fixer:  <30-05-21, yourname> "
-" coc lsp:  <31-05-21, yourname> "
-" ale extend filetype:  <30-05-21, yourname> "
-" coc extend filetype:  <30-05-21, yourname> "
-" vim-peekaboo:  <31-05-21, yourname> "
 
 " ==========================
 " Text, tab, and indentation
@@ -57,7 +55,7 @@ set completeopt     =menuone,longest,preview    " Show popup menu even there's o
 
 set number                              " Show the line numbers on the sidebar
 set relativenumber                      " Show line number on the current line and relative numbers on all other lines
-set signcolumn  =number                         " Merge signcolumn and numbercolumn
+set signcolumn      =number             " Merge signcolumn and numbercolumn
 set cursorline                          " Highlight the line currently under cursor
 set ruler                               " Always show cursor position at the status bar
 set scrolloff       =3                  " Always show last 3 lines when scrolling
@@ -77,6 +75,7 @@ set ignorecase                          " Perform case-insensitive search
 set smartcase                           " Perform case-sensitive search when pattern contains uppercase letter
 
 set mouse           =a                  " Enable mouse for scrolling and resizing
+set ttymouse        =xterm2             " Enable mouse inside tmux
 set whichwrap       +=h,l,<,>           " Move cursor to the next line when it reaches end of line
 set showmatch                           " Jump to the matching opening bracket when typed a closing bracket
 set mat             =2                  " Define the waiting time at the opening bracket
@@ -112,19 +111,6 @@ set undofile                                    " Allow persistent undo feature
 set viminfo     +=n~/.vim/viminfo               " Locate viminfor inside .vim directory
 let mapleader   ="\<Space>"                     " Define the leader key to <Space>
 
-" ============================
-" OmniCompletion Configuration
-" ============================
-" Enable language-specific autocompletion
-autocmd filetype css        set         omnifunc=csscomplete#CompleteCSS
-autocmd filetype html       set         omnifunc=htmlcomplete#CompleteTags
-autocmd filetype javascript set         omnifunc=javascriptcomplete#CompleteJS
-autocmd filetype php        set         omnifunc=phpcomplete#CompletePHP
-autocmd filetype c          setlocal    omnifunc=ccomplete#Complete
-autocmd filetype cpp        setlocal    omnifunc=cppcomplete#Complete
-autocmd filetype python     setlocal    omnifunc=python3complete#Complete
-autocmd filetype java       setlocal    omnifunc=javacomplete#Complete
-
 " =========
 " Key remap
 " =========
@@ -133,8 +119,8 @@ nnoremap Y y$
 nnoremap yy Y
 
 " Format the indentation after put for c file
-autocmd FileType c map p p'[=']
-autocmd FileType c map P P'[=']
+map p p'[=']
+map P P'[=']
 
 " ===========================
 " Cursor Movement Keybinding 
@@ -162,11 +148,6 @@ sunmap e
 " |_____|_| |_|_|_|_| |_|\___|  \___|\__,_|_|  |___/\___/|_|    |_| |_| |_|\___/ \_/ \___|_| |_| |_|\___|_| |_|\__|
 nnoremap j gj
 nnoremap k gk
-
-" Go to the beginning of the line
-" Go to the end of the line
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
 
 " Jump to start/end of function with K&R style
 nnoremap [[ ?{<CR>w99[{
@@ -223,9 +204,6 @@ nnoremap <Leader>a :diffput <Bar> normal ]c<CR>
 
 " Disable highlight search
 nnoremap <leader>hi :nohls<CR>
-
-" Open newline without entering insert mode
-nnoremap <Leader>o o<ESC>
 
 " ============
 " Abbreviation
@@ -339,7 +317,6 @@ let g:no_status_line                    =1                                      
 
 highlight default link TagbarSignature Normal
 
-
 " ========================
 " EasyMotion Configuration
 " ========================
@@ -372,3 +349,13 @@ let g:mundo_preview_bottom      =1                  " Display Mundo diff window 
 let g:mundo_tree_statusline     ="Mundo UndoTree"   " Define name of Mundo undo window
 let g:mundo_preview_statusline  ="Mundo Diff"       " Define name of Mundo diff window
 let g:mundo_auto_preview_delay  =0                  " Define timeout for Mundo preview
+
+" =======
+" Vim-rsi
+" =======
+let g:rsi_no_meta = 1 " Disable rsi binding starts with <Meta>
+
+" ========
+" Vim-lion
+" ========
+let g:lion_squeeze_spaces = 1
