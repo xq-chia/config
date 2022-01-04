@@ -29,8 +29,12 @@ Plugin 'bkad/CamelCaseMotion'               " Load CamelCaseMotion which move cu
 Plugin 'junegunn/vim-peekaboo'              " Load vim-peekaboo that extends register and macro
 Plugin 'tommcdo/vim-lion'                   " Load vim-lion that align code
 Plugin 'tommcdo/vim-exchange'               " Load vim-exchange that exchange words and lines
+Plugin 'azabiong/vim-highlighter'           " Load vim-highlighter that highlight lines and words of interest
+Plugin 'pechorin/any-jump'                  " Load any-jump that follows code in code base
 call vundle#end()                           " Terminate initialisation of Vundle
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
+
+" TODO: config vim-highlighter, any-jump
 
 " ==========================
 " Text, tab, and indentation
