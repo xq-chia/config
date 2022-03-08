@@ -32,15 +32,13 @@ Plugin 'tommcdo/vim-exchange'               " Load vim-exchange that exchange wo
 Plugin 'azabiong/vim-highlighter'           " Load vim-highlighter that highlight lines and words of interest
 Plugin 'pechorin/any-jump.vim'              " Load any-jump.vim that follows code in code base
 Plugin 'mileszs/ack.vim'                    " Load ack.vim that integrate ack
-Plugin 'junegunn/fzf'                       " Load fzf.vim that integrate fzf
-Plugin 'ervandew/supertab'                  " Load supertab that autocomplete with <Tab> key
-Plugin 'vim-scripts/AutoComplPop'           " Load AutoComplPop that pop autocomplete menu automatically
+Plugin 'junegunn/fzf'                       " Load fzf file fuzzy finder
+Plugin 'junegunn/fzf.vim'                   " Load fzf.vim that integrate fzf
+Plugin 'ervandew/supertab'                  " Load supertab that uses <Tab> to trigger autocompletion
 Plugin 'SirVer/ultisnips'                   " Load ultisnips snippet manager
 Plugin 'honza/vim-snippets'                 " Load vim-snippets that provides snippet template
 call vundle#end()                           " Terminate initialisation of Vundle
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
-
-" TODO: config vim-highlighter, any-jump, ack.vim, fzf, supertab, autocomplpop, ultisnips
 
 " ==========================
 " Text, tab, and indentation
@@ -98,9 +96,7 @@ set wrap                                " Wrap line to fit the window size
 set linebreak                           " Wrap line at word boundary
 set colorcolumn     =80,100             " Draw a line at column 80
 
-set listchars       =trail:~,space:·    " Display trailing space as '~' and space as '·'
-
-set noequalalways                       " Splitting window and closing window won't alter the window size
+set listchars       =trail:~,space:·    " Display trailing space as '~' and space as '·' set noequalalways                       " Splitting window and closing window won't alter the window size
 
 " =============
 " Miscellaneous
@@ -119,6 +115,7 @@ set nrformats   =alpha,hex,bin                  " Define the standard vim used f
 set undodir     =~/.vim/temp_dir/undofile       " Define file location for undo file
 set undofile                                    " Allow persistent undo feature
 set viminfo     +=n~/.vim/viminfo               " Locate viminfor inside .vim directory
+set updatetime  =2000                           " Define wait time for CursorHold event
 let mapleader   ="\<Space>"                     " Define the leader key to <Space>
 
 " =========
@@ -181,19 +178,15 @@ map <Plug>(easymotion-prefix)/ <Plug>(easymotion-sn)
 " ============================
 " Open directory browser
 nnoremap <M-f> :Lexplore<CR>
-inoremap <M-f> <C-O>:Lexplore<CR>
 
 " Open debugger
 nnoremap <M-d> :Termdebug<CR>
-inoremap <M-d> <C-O>:Termdebug<CR>
 
 " Open outliner
 nnoremap <M-o> :Tagbar<CR>
-inoremap <M-o> <C-O>:Tagbar<CR>
 
 " Open version controller
 nnoremap <M-u> :MundoToggle<CR>
-inoremap <M-u> <C-O>:MundoToggle<CR>
 
 " Close preview window
 nnoremap <M-q> :pclose<CR>
@@ -203,6 +196,10 @@ nnoremap <M-k> :PreviewScroll -1<CR>
 inoremap <M-k> <C-O>:PreviewScroll -1<CR>
 nnoremap <M-j> :PreviewScroll +1<CR>
 inoremap <M-j> <C-O>:PreviewScroll +1<CR>
+
+" Jump to reference
+nnoremap <F1> :AnyJump<CR>
+xnoremap <F1> :AnyJumpVisual<CR>
 
 " =====================
 " Leader Key Keybinding
@@ -249,6 +246,11 @@ command MakeTags !ctags
 " Remove corrupted undofile with :FixUndoDir command
 " TODO: runs automatically when detected error
 command FixUndoDir !find ~/.vim/temp_dir/undofile -size 0 -print -delete
+" Highlight word under cursor after staying still
+augroup HighlightWordUnderCursor
+    au!
+    au CursorHold * :exec 'match Search /\V\<' . expand('<cword>') . '\>/'
+augroup END
 
 " =============
 " Alt Key Tweak
@@ -369,3 +371,23 @@ let g:rsi_no_meta = 1 " Disable rsi binding starts with <Meta>
 " Vim-lion
 " ========
 let g:lion_squeeze_spaces = 1
+
+" ========
+" Any-jump
+" ========
+let g:any_jump_list_numbers                = 1
+let g:any_jump_disable_default_keybindings = 1
+
+" =======
+" Fzf.vim
+" =======
+let g:ackprg = 'ag --vimgrep'
+
+" ========
+" SuperTab
+" ========
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabLongestHighlight = 1
+let g:SuperTabCrMapping = 1
+let g:SuperTabClosePreviewOnPopupClose = 1
