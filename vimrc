@@ -27,7 +27,7 @@ Plugin 'simnalamburt/vim-mundo'             " Load vim-mundo that visualise vim 
 Plugin 'tpope/vim-fugitive'                 " Load vim-fugitive which integrates git
 Plugin 'bkad/CamelCaseMotion'               " Load CamelCaseMotion which move cursor with programming naming convention
 Plugin 'junegunn/vim-peekaboo'              " Load vim-peekaboo that extends register and macro
-Plugin 'tommcdo/vim-lion'                   " Load vim-lion that align code
+Plugin 'godlygeek/tabular'                  " Load tabular that align text
 Plugin 'tommcdo/vim-exchange'               " Load vim-exchange that exchange words and lines
 Plugin 'azabiong/vim-highlighter'           " Load vim-highlighter that highlight lines and words of interest
 Plugin 'pechorin/any-jump.vim'              " Load any-jump.vim that follows code in code base
@@ -95,6 +95,8 @@ syntax on                               " Enable syntax highlighting
 set wrap                                " Wrap line to fit the window size
 set linebreak                           " Wrap line at word boundary
 set colorcolumn     =80,100             " Draw a line at column 80
+highlight ColorColumn ctermbg=241
+
 
 set listchars       =trail:~,space:·    " Display trailing space as '~' and space as '·' set noequalalways                       " Splitting window and closing window won't alter the window size
 
@@ -212,6 +214,13 @@ nnoremap <Leader>a :diffput <Bar> normal ]c<CR>
 " Disable highlight search
 nnoremap <leader>hi :nohls<CR>
 
+" ======================
+" Highlighter Keybinding
+" ======================
+let HiSet = '<leader>hw'
+let HiErase = '<leader>dhw'
+let HiClear = 'h<Space>'
+
 " ============
 " Abbreviation
 " ============
@@ -231,6 +240,7 @@ command Config tabnew ~/.vim/vimrc
 " Reload .vimrc file with :Reload command
 command Reload source ~/.vim/vimrc | echom "Config reloaded..."
 " Toggle 'list' command to show whitespace with :Whitespace command
+"
 command Whitespace :call Prettier()
 function! Prettier()
     if (&list == 'list')
@@ -241,16 +251,19 @@ function! Prettier()
         set nolist
     endif
 endfunction
+
 " Create tag file with :MakeTags command
 command MakeTags !ctags
+
 " Remove corrupted undofile with :FixUndoDir command
 " TODO: runs automatically when detected error
 command FixUndoDir !find ~/.vim/temp_dir/undofile -size 0 -print -delete
+
 " Highlight word under cursor after staying still
-augroup HighlightWordUnderCursor
-    au!
-    au CursorHold * :exec 'match Search /\V\<' . expand('<cword>') . '\>/'
-augroup END
+" augroup HighlightWordUnderCursor
+"     au!
+"     au CursorHold * :exec 'match Search /\V\<' . expand('<cword>') . '\>/'
+" augroup END
 
 " =============
 " Alt Key Tweak
@@ -368,15 +381,11 @@ let g:mundo_auto_preview_delay  =0                  " Define timeout for Mundo p
 let g:rsi_no_meta = 1 " Disable rsi binding starts with <Meta>
 
 " ========
-" Vim-lion
-" ========
-let g:lion_squeeze_spaces = 1
-
-" ========
 " Any-jump
 " ========
 let g:any_jump_list_numbers                = 1
 let g:any_jump_disable_default_keybindings = 1
+let g:any_jump_search_prefered_engine      = 'ag'
 
 " =======
 " Fzf.vim
@@ -389,5 +398,15 @@ let g:ackprg = 'ag --vimgrep'
 let g:SuperTabDefaultCompletionType = 'context'
 let g:SuperTabLongestEnhanced = 1
 let g:SuperTabLongestHighlight = 1
-let g:SuperTabCrMapping = 1
-let g:SuperTabClosePreviewOnPopupClose = 1
+
+" ===============
+" Vim-highlighter
+" ===============
+" TODO: not working for unknown reason
+call feedkeys("\<Space>dhw")
+call feedkeys("\<Space>hw")
+
+" =====================
+" Tabular Configuration
+" =====================
+
