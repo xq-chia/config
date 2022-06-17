@@ -31,12 +31,13 @@ Plugin 'godlygeek/tabular'                  " Load tabular that align text
 Plugin 'tommcdo/vim-exchange'               " Load vim-exchange that exchange words and lines
 Plugin 'azabiong/vim-highlighter'           " Load vim-highlighter that highlight lines and words of interest
 Plugin 'pechorin/any-jump.vim'              " Load any-jump.vim that follows code in code base
-Plugin 'mileszs/ack.vim'                    " Load ack.vim that integrate ack
 Plugin 'junegunn/fzf'                       " Load fzf file fuzzy finder
 Plugin 'junegunn/fzf.vim'                   " Load fzf.vim that integrate fzf
 Plugin 'ervandew/supertab'                  " Load supertab that uses <Tab> to trigger autocompletion
 Plugin 'SirVer/ultisnips'                   " Load ultisnips snippet manager
 Plugin 'honza/vim-snippets'                 " Load vim-snippets that provides snippet template
+Plugin 'airblade/vim-gitgutter'             " Load vim-gitgutter that shows git status at numer bar
+Plugin 'tpope/vim-vinegar'                  " Load vim-vinegar that extends netrw keybinding
 call vundle#end()                           " Terminate initialisation of Vundle
 filetype plugin indent on                   " Turn on filetype-specific, plugin-specific indentation rule
 
@@ -405,8 +406,3 @@ let g:SuperTabLongestHighlight = 1
 " TODO: not working for unknown reason
 call feedkeys("\<Space>dhw")
 call feedkeys("\<Space>hw")
-
-" =====================
-" Tabular Configuration
-" =====================
-
