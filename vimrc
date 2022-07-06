@@ -201,8 +201,8 @@ nnoremap <M-j> :PreviewScroll +1<CR>
 inoremap <M-j> <C-O>:PreviewScroll +1<CR>
 
 " Jump to reference
-nnoremap <F1> :AnyJump<CR>
-xnoremap <F1> :AnyJumpVisual<CR>
+nnoremap <F1> :call Preserve("AnyJump")<CR>
+xnoremap <F1> :call Preserve("AnyJump")<CR>
 
 " =====================
 " Leader Key Keybinding
@@ -406,3 +406,16 @@ let g:SuperTabLongestHighlight = 1
 " TODO: not working for unknown reason
 call feedkeys("\<Space>dhw")
 call feedkeys("\<Space>hw")
+
+" ==========================
+" Any-jump.vim Configuration
+" ==========================
+" Don't jump to head of file when searching
+function Preserve(command)
+    let _s=@/
+    let l=line(".")
+    let c=col(".")
+    execute a:command
+    let @/=_s
+    call cursor(l,c)
+endfunction
